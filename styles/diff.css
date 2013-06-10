@@ -1,0 +1,16 @@
+@CHARSET "UTF-8";
+
+.deleted
+{
+	background-color : #FCC;
+}
+
+.added
+{
+	background-color : #C6FFB3;
+}
+
+.modified
+{
+	background-color : #DBDBFF;
+}

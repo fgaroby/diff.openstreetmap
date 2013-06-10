@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+
+table.diff
+{
+	border : solid 1px black;
+	border-collapse : collapse;
+}
+
+table.diff tr, table.diff th, table.diff td
+{
+	border : solid 1px black;
+}
+
+table.diff td
+{
+	padding : 2px 5px;
+}

@@ -1,0 +1,9 @@
+[submodule "externals/Services_OSM"]
+	path = externals/Services_OSM
+	url = https://github.com/kenguest/Services_Openstreetmap.git
+[submodule "XMLdiff"]
+	path = XMLdiff
+	url = https://github.com/mmacia/XMLdiff.git
+[submodule "lib/XMLDiff"]
+	path = lib/XMLDiff
+	url = https://github.com/mmacia/XMLdiff.git
