@@ -93,6 +93,12 @@ class OsmDiff
 	{
 		return $this->type;
 	}
+	
+	
+	public function getId()
+	{
+		return $this->id;
+	}
 
 
 	public function diff()

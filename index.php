@@ -31,7 +31,7 @@
 ?>
 		
 			<table class="diff">
-				<caption><?php echo ( $_GET['primitives'] == 'node' || $_GET['primitives'] == 'way' ? ucfirst( $_GET['primitives']) : ucfirst( $_GET['primitives'] ) ) . ' : <a href="' . $browse . $_GET['primitives'] . '/' . $_GET['id'] . '">' . $_GET['id'] . '</a>'; ?></caption>
+				<caption><?php echo ucfirst( $osm->getType() ) . ' : <a href="' . $browse . $osm->getType() . '/' . $osm->getId() . '">' . $osm->getId() . '</a>'; ?></caption>
 				<tr>
 					<th colspan="2">Version <?php echo $from->getVersion(); ?></th>
 					<th colspan="2">Version <?php echo $to->getVersion(); ?></th>
@@ -56,6 +56,8 @@
 ?>
 			</table>
 <?php
+
+			//if( )
 		}
 ?>
 	</body>
