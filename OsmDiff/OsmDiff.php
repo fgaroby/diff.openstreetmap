@@ -2,6 +2,7 @@
 require_once( dirname( __FILE__ ) . '/../Services/OpenStreetMap.php' );
 require_once( dirname( __FILE__ ) . '/Match.php' );
 require_once( dirname( __FILE__ ) . '/Tag.php' );
+require_once( dirname( __FILE__ ) . '/Member.php' );
 require_once( dirname( __FILE__ ) . '/Pair.php' );
 
 
@@ -105,7 +106,7 @@ class OsmDiff
 	{
 		$match = new Match();
 		
-		// Cas d'un node : on gère ses coordonées comme des tags
+		// Cas d'un node : on gère ses coordonnées comme des tags
 		if( $this->type == 'node' )
 		{
 			$match->add( new Pair( new Tag( 'Latitude', $this->from->getLat() ), new Tag( 'Latitude', $this->to->getLat() ) ) );
@@ -119,6 +120,16 @@ class OsmDiff
 		{
 			if( $this->from->getTag( $key ) === null )
 				$match->add( new Pair( null, new Tag( $key, $this->to->getTag( $key ) ) ) );
+		}
+		
+		// Cas d'une relation : on gère ses membres comme des tags
+		if( $this->type == 'relation' )
+		{
+			$fromMembers = $this->from->getMembers();
+			$toMembers = $this->to->getMembers();
+			
+			foreach( $fromMembers as $key => $fromMember )
+				$match->add( new Pair( new MemberTag( $fromMember['type'], $fromMember['ref'], $fromMember['role'] ), ( $toMembers[$key] !== null  ? new MemberTag( $toMembers[$key]['type'], $toMembers[$key]['ref'], $toMembers[$key]['role'] ) : null ) ) );
 		}
 		return $match;
 	}
