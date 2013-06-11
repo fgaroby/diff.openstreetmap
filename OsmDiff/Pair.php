@@ -25,13 +25,13 @@ class Pair
 	
 	public function isModified()
 	{
-		return !$this->isEmpty( $this->from ) && $this->isEmpty( $this->to ) && $this->from != $this->to;
+		return !$this->isEmpty( $this->from ) && !$this->isEmpty( $this->to ) && $this->from != $this->to;
 	}
 	
 	
 	public function isDeleted()
 	{
-		return $this->isEmpty( $this->from ) && $this->isEmpty( $this->to );
+		return !$this->isEmpty( $this->from ) && $this->isEmpty( $this->to );
 	}
 	
 	

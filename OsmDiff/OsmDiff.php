@@ -5,6 +5,7 @@ require_once( dirname( __FILE__ ) . '/Tag.php' );
 require_once( dirname( __FILE__ ) . '/Member.php' );
 require_once( dirname( __FILE__ ) . '/Node.php' );
 require_once( dirname( __FILE__ ) . '/Pair.php' );
+require_once( dirname( __FILE__ ) . '/../utils/tools.php' );
 
 
 class OsmDiff
@@ -142,9 +143,20 @@ class OsmDiff
 		{
 			$fromMembers = $this->from->getMembers();
 			$toMembers = $this->to->getMembers();
-			
+
 			foreach( $fromMembers as $key => $fromMember )
-				$match->add( new Pair( new Member( $fromMember['type'], $fromMember['ref'], $fromMember['role'] ), ( $toMembers[$key] !== null  ? new Member( $toMembers[$key]['type'], $toMembers[$key]['ref'], $toMembers[$key]['role'] ) : null ) ) );
+			{
+				if( $inArray = in_array_r( $fromMember, $toMembers ) )
+					$toMember = new Member( $inArray['type'], $inArray['ref'], $inArray['role'] );
+				else
+					$toMember = null;
+				$match->add( new Pair( new Member( $fromMember['type'], $fromMember['ref'], $fromMember['role'] ), $toMember ) );
+			}
+			foreach( $toMembers as $key => $toMember )
+			{
+				if( !in_array_r( $toMember, $fromMembers ) )
+					$match->add( new Pair( null, new Member( $toMembers[$key]['type'], $toMembers[$key]['ref'], $toMembers[$key]['role'] ) ) );
+			}
 		}
 		return $match;
 	}
