@@ -7,11 +7,11 @@
 	</head>
 	<body>
 		<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-			<input type="text" name="id" value="<?php echo $_GET['id']; ?>" />
+			<input type="text" name="id" value="<?php echo ( isset( $_GET['id'] ) ? $_GET['id'] : '' ) ; ?>" />
 			<select name="primitives">
-				<option value="node" <?php echo ( $_GET['primitives'] == 'node' ? 'selected="selected"' : '' ); ?>>node</option>
-				<option value="way" <?php echo ( $_GET['primitives'] == 'way' ? 'selected="selected"' : '' ); ?>>way</option>
-				<option value="relation" <?php echo ( $_GET['primitives'] == 'relation' ? 'selected="selected"' : '' ); ?>>relation</option>
+				<option value="node" <?php echo ( isset( $_GET['primitives'] ) && $_GET['primitives'] == 'node' ? 'selected="selected"' : '' ); ?>>node</option>
+				<option value="way" <?php echo ( isset( $_GET['primitives'] ) && $_GET['primitives'] == 'way' ? 'selected="selected"' : '' ); ?>>way</option>
+				<option value="relation" <?php echo ( isset( $_GET['primitives'] ) && $_GET['primitives'] == 'relation' ? 'selected="selected"' : '' ); ?>>relation</option>
 			</select>
 			<input type="submit" name="submit" value="Valider" />
 		</form>
@@ -22,14 +22,15 @@
 		
 		if( isset( $_GET['id'] ) )
 		{
+			$from = isset( $_GET['from'] ) ? $_GET['from'] : null;
+			$to = isset( $_GET['to'] ) ? $_GET['to'] : null;
 			require_once( './OsmDiff/OsmDiff.php' );
-			$osm = new OsmDiff( $_GET['id'], $_GET['primitives'], $_GET['from'], $_GET['to'] );
+			$osm = new OsmDiff( $_GET['id'], $_GET['primitives'], $from, $to );
 			$match = $osm->diff();
 			$from = $osm->getFrom();
 			$to = $osm->getTo();
 				
 ?>
-		
 			<table class="diff">
 				<caption><?php echo ucfirst( $osm->getType() ) . ' : <a href="' . $browse . $osm->getType() . '/' . $osm->getId() . '">' . $osm->getId() . '</a>'; ?></caption>
 				<tr>
@@ -56,8 +57,6 @@
 ?>
 			</table>
 <?php
-
-			//if( )
 		}
 ?>
 	</body>
