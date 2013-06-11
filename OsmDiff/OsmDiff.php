@@ -3,6 +3,7 @@ require_once( dirname( __FILE__ ) . '/../Services/OpenStreetMap.php' );
 require_once( dirname( __FILE__ ) . '/Match.php' );
 require_once( dirname( __FILE__ ) . '/Tag.php' );
 require_once( dirname( __FILE__ ) . '/Member.php' );
+require_once( dirname( __FILE__ ) . '/Node.php' );
 require_once( dirname( __FILE__ ) . '/Pair.php' );
 
 
@@ -122,6 +123,20 @@ class OsmDiff
 				$match->add( new Pair( null, new Tag( $key, $this->to->getTag( $key ) ) ) );
 		}
 		
+		// Cas d'une way : on gère ses noeuds comme des tags
+		if( $this->type == 'way' )
+		{
+			$fromNodes = $this->from->getNodes();
+			$toNodes = $this->to->getNodes();
+			
+			foreach( $fromNodes as $fromNode )
+				$match->add( new Pair( new Node( $fromNode ), ( in_array( $fromNode, $toNodes ) !== false  ? new Node($fromNode ) : null ) ) );
+			foreach( $toNodes as $toNode )
+				if( !in_array( $toNode, $fromNodes ) )
+					$match->add( new Pair( null, new Node($fromNode ) ) );
+		}
+		
+		
 		// Cas d'une relation : on gère ses membres comme des tags
 		if( $this->type == 'relation' )
 		{
@@ -129,7 +144,7 @@ class OsmDiff
 			$toMembers = $this->to->getMembers();
 			
 			foreach( $fromMembers as $key => $fromMember )
-				$match->add( new Pair( new MemberTag( $fromMember['type'], $fromMember['ref'], $fromMember['role'] ), ( $toMembers[$key] !== null  ? new MemberTag( $toMembers[$key]['type'], $toMembers[$key]['ref'], $toMembers[$key]['role'] ) : null ) ) );
+				$match->add( new Pair( new Member( $fromMember['type'], $fromMember['ref'], $fromMember['role'] ), ( $toMembers[$key] !== null  ? new Member( $toMembers[$key]['type'], $toMembers[$key]['ref'], $toMembers[$key]['role'] ) : null ) ) );
 		}
 		return $match;
 	}
