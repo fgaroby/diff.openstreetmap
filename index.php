@@ -1,17 +1,20 @@
 <html>
 	<head>
+		<base href="<?php $_SERVER['SERVER_NAME']; ?>/diff.openstreetmap/" >
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" media="all" href="./styles/main.css" />
 		<link rel="stylesheet" type="text/css" media="all" href="./styles/diff.css" />
+		<script type="text/javascript" src="./js/jquery-2.0.2.js"></script>
+		<script type="text/javascript" src="./js/diff.js"></script>
 		<title>Diff OpenStreetMap</title>
 	</head>
 	<body>
 		<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-			<input type="text" name="id" value="<?php echo ( isset( $_GET['id'] ) ? $_GET['id'] : '' ) ; ?>" />
-			<select name="primitives">
-				<option value="node" <?php echo ( isset( $_GET['primitives'] ) && $_GET['primitives'] == 'node' ? 'selected="selected"' : '' ); ?>>node</option>
-				<option value="way" <?php echo ( isset( $_GET['primitives'] ) && $_GET['primitives'] == 'way' ? 'selected="selected"' : '' ); ?>>way</option>
-				<option value="relation" <?php echo ( isset( $_GET['primitives'] ) && $_GET['primitives'] == 'relation' ? 'selected="selected"' : '' ); ?>>relation</option>
+			<input type="text" name="id" id="id" value="<?php echo ( isset( $_GET['id'] ) ? $_GET['id'] : '' ) ; ?>" />
+			<select name="primitives" id="primitives">
+				<option value="node" <?php echo ( isset( $_GET['primitive'] ) && $_GET['primitive'] == 'node' ? 'selected="selected"' : '' ); ?>>node</option>
+				<option value="way" <?php echo ( isset( $_GET['primitive'] ) && $_GET['primitive'] == 'way' ? 'selected="selected"' : '' ); ?>>way</option>
+				<option value="relation" <?php echo ( isset( $_GET['primitive'] ) && $_GET['primitive'] == 'relation' ? 'selected="selected"' : '' ); ?>>relation</option>
 			</select>
 			<input type="submit" name="submit" value="Valider" />
 		</form>
@@ -25,7 +28,7 @@
 			$from = isset( $_GET['from'] ) ? $_GET['from'] : null;
 			$to = isset( $_GET['to'] ) ? $_GET['to'] : null;
 			require_once( './OsmDiff/OsmDiff.php' );
-			$osm = new OsmDiff( $_GET['id'], $_GET['primitives'], $from, $to );
+			$osm = new OsmDiff( $_GET['id'], $_GET['primitive'], $from, $to );
 			$match = $osm->diff();
 			$from = $osm->getFrom();
 			$to = $osm->getTo();
@@ -34,8 +37,22 @@
 			<table class="diff">
 				<caption><?php echo ucfirst( $osm->getType() ) . ' : <a href="' . $browse . $osm->getType() . '/' . $osm->getId() . '">' . $osm->getId() . '</a>'; ?></caption>
 				<tr>
-					<th colspan="2">Version <?php echo $from->getVersion(); ?></th>
-					<th colspan="2">Version <?php echo $to->getVersion(); ?></th>
+					<th colspan="2">Version
+						<select name="from" id="fromSelect" onchange="updateVersion();">
+						<?php
+							for( $i = 1; $i <= $osm->getHistory()->count(); $i++)
+								echo '<option value="' . $i . '" ' . ( $i > $to->getVersion() - 1 ? 'disabled="disabled"' : ( $i == $from->getVersion() ? 'selected="selected"' : '' ) ) . '>' . $i . '</option>';
+						?>
+						</select>
+					</th>
+					<th colspan="2">Version
+					<select name="to" id="toSelect" onchange="updateVersion();">
+						<?php
+							for( $i = 1; $i <= $osm->getHistory()->count(); $i++)
+								echo '<option value="' . $i . '" ' . ( $i <= $from->getVersion() ? 'disabled="disabled"' : ( $i == $to->getVersion() ? 'selected="selected"' : '' ) ) . '>' . $i . '</option>';
+						?>
+						</select>
+					</th>
 				</tr>
 				<tr>
 					<th>Clés</th>
