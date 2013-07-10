@@ -13,6 +13,7 @@ PEAR packages needed :
 
 ## Use :
 Call diff.openstreetmap with URLs like this : &lt;hostname&gt;/diff.openstreetmap/diff/&lt;primitive&gt;/&lt;id&gt;/{from}/{to},
+
 where :
 * [primitive] : the type of primitive (node, way or relation) ;
 * [id] : the id of the object to be displayed ;
