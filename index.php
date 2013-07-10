@@ -11,7 +11,7 @@
 	<body>
 		<form method="get" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 			<input type="text" name="id" id="id" value="<?php echo ( isset( $_GET['id'] ) ? $_GET['id'] : '' ) ; ?>" />
-			<select name="primitives" id="primitives">
+			<select name="primitive" id="primitive">
 				<option value="node" <?php echo ( isset( $_GET['primitive'] ) && $_GET['primitive'] == 'node' ? 'selected="selected"' : '' ); ?>>node</option>
 				<option value="way" <?php echo ( isset( $_GET['primitive'] ) && $_GET['primitive'] == 'way' ? 'selected="selected"' : '' ); ?>>way</option>
 				<option value="relation" <?php echo ( isset( $_GET['primitive'] ) && $_GET['primitive'] == 'relation' ? 'selected="selected"' : '' ); ?>>relation</option>

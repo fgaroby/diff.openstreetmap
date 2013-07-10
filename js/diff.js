@@ -19,7 +19,7 @@ function getURL( from, to )
 		i ++;
 	}
 	
-	primitive = $( '#primitives option:selected' ).val();
+	primitive = $( '#primitive option:selected' ).val();
 	id = $( '#id' ).val();
 	url += 'diff/' + primitive + '/' + id + '/' + from + '/' + to;
 
