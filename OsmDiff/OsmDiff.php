@@ -103,6 +103,12 @@ class OsmDiff
 		return $this->id;
 	}
 
+	
+	public function getHistory()
+	{
+		return $this->history;
+	}
+	
 
 	public function diff()
 	{
