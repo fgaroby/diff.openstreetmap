@@ -1,27 +1,35 @@
-function updateVersion()
+function valider()
 {
-	from = $( '#fromSelect option:selected' ).val();
-	to = $( '#toSelect option:selected' ).val();
+	primitive = $( '#primitive option:selected' ).val();
+	id = $( '#id' ).val();
 	
-	$( location ).attr( 'href', getURL( from, to ) );
+	goTo( primitive, id, null, null );
 }
 
 
-function getURL( from, to )
+function updateVersion()
 {
-	pathArray = window.location.href.split( '/' );
-	var url = '';
-	
-	var i = 0;
-	while( pathArray[i] != 'diff' )
-	{
-		url += pathArray[i] + '/';
-		i ++;
-	}
-	
 	primitive = $( '#primitive option:selected' ).val();
 	id = $( '#id' ).val();
-	url += 'diff/' + primitive + '/' + id + '/' + from + '/' + to;
+	from = $( '#fromSelect option:selected' ).val();
+	to = $( '#toSelect option:selected' ).val();
+	
+	goTo( from, to );
+}
 
-	return url;
+
+function goTo( primitive, id, from, to )
+{
+	path = location.pathname.substring( 0, location.pathname.indexOf( 'index.php' ) );
+
+	url = path + 'diff/' + primitive + '/' + id;
+	
+	if( from )
+	{
+		url += '/' + from;
+		if( to)
+			url += '/' + to;
+	}
+
+	$( location ).attr( 'href', url );
 }
